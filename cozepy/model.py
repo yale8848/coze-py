@@ -1,4 +1,5 @@
 import abc
+import json
 from typing import (
     TYPE_CHECKING,
     AsyncIterator,
@@ -31,6 +32,18 @@ AsyncPage = TypeVar("AsyncPage", bound="AsyncPagedBase")
 
 class CozeModel(BaseModel):
     model_config = ConfigDict(protected_namespaces=())
+
+    @classmethod
+    def model_validate(cls,dict_value):
+        obj=cls(**dict_value)
+        return obj
+    def model_dump(self):
+        return vars(self)
+    @classmethod
+    def model_validate_json(cls,json_data):
+        dict_value=json.loads(json_data)
+        obj = cls(**dict_value)
+        return obj
 
 
 class HTTPResponse(Generic[T]):
